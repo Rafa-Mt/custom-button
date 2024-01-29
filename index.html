@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="ButtonComponent.js" type="module"></script>
+</head>
+<body>
+    <script>
+        const doThis = (event) => {
+            // prevent default action
+            event.preventDefault();
+            alert("Hello");
+        }
+    </script>
+    <custom-button
+        onclick="doThis()"
+    >Hello</custom-button>
+</body>
+</html> 
