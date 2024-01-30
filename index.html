@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="ButtonComponent.js" type="module"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <script>
-        const doThis = (event) => {
-            // prevent default action
-            event.preventDefault();
-            alert("Hello");
-        }
-    </script>
     <custom-button
-        onclick="doThis()"
-    >Hello</custom-button>
+        events="{
+                'click': function() {
+                    alert('Hello');   
+                },
+            }"
+
+        classes="['btn', 'btn-primary']"
+    >
+        Hello
+    </custom-button>
 </body>
 </html> 
