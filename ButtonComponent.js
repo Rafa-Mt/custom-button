@@ -23,6 +23,10 @@ export default class ButtonComponent extends HTMLElement {
      */
     #classes 
 
+    /**
+     * 
+     * @param {ButtonComponentProps} props 
+     */
     constructor(props) {
         super();
         /**
@@ -39,7 +43,6 @@ export default class ButtonComponent extends HTMLElement {
 
         if (this.hasAttribute("events")) {
             buttonProps.events = eval(`(${this.getAttribute("events")})`)
-            console.log(buttonProps.events)
         }
         if (this.hasAttribute("styles")) {
             buttonProps.styles = eval(`(${this.getAttribute("styles")})`)
@@ -60,7 +63,6 @@ export default class ButtonComponent extends HTMLElement {
     }
     
     connectedCallback() {
-        
         this.attachShadow({mode: "open"});
         const styleSheet = document.createElement("style");
         this.shadowRoot.appendChild(styleSheet);

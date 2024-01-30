@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crazy Button</title>
+    <style>
+        body {
+
+            font-family: sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        
+        }
+        .crazy-container {
+            width: 90%;
+            height: 70vh;
+            border: 1px solid ;
+            position: relative;
+        }
+        .crazy-button {
+            font-size: large;
+        }
+    </style>
+    <script src="../../ButtonComponent.js" type="module"></script>
+</head>
+<body>
+    <h1>Crazy Button </h1>
+    <div class="crazy-container">
+        <custom-button
+            events="{
+                'mouseover': function() {
+                    this.style.top = Math.random() * 90 + '%';
+                    this.style.left = Math.random() * 90 + '%';
+                    this.style.backgroundColor = 'rgb(' + Math.random() * 255 + ',' + Math.random() * 255 + ',' + Math.random() * 255 + ')';   
+                },
+                'click': function() {
+                    alert('you won $1,000,000');
+                }
+                
+            }"
+            styles="{
+                position: 'absolute',
+                transition: 'all 0.2s ease',
+                'user-select': 'none',
+            }"
+            classes="['crazy-button']"
+            >
+            click me to win $1,000,000
+        </custom-button>
+    </div>
+    
+    
+</body>
+</html>
