@@ -1,32 +1,72 @@
+/**
+ * @typedef {Object} ButtonComponentProps
+ * @property {Object} events
+ * @property {Object} styles
+ * @property {String} template
+ * @property {Array} classes
+ */
 export default class ButtonComponent extends HTMLElement {
+    /**
+     * @type {Object} 
+     */
     #events;
+    /**
+     * @type {Object}
+     */
     #styles;
-    #text;
+    /**
+     * @type {String}
+     */
+    #template;
+    /**
+     * @type {Array}
+     */
+    #classes 
 
     /**
      * 
-     * @param {Object} events
-     * @param {Object} styles
-     * @param {} 
+     * @param {ButtonComponentProps} props 
      */
     constructor(props) {
         super();
-        const p = Object.assign({
+        /**
+         * @type {ButtonComponentProps}
+         */
+        const buttonProps = Object.assign({
             events: {
-                click: () => {alert("default click event")}
             },
             styles: {},
-            text: ""
+            template: "",
+            classes: []
         }, props)
-        this.attachShadow({mode: "open"})
-
-        this.#events = p.events;
-        this.#styles = p.styles;
-        this.#text = p.text;
         
+
+        if (this.hasAttribute("events")) {
+            buttonProps.events = eval(`(${this.getAttribute("events")})`)
+        }
+        if (this.hasAttribute("styles")) {
+            buttonProps.styles = eval(`(${this.getAttribute("styles")})`)
+        }
+        if (this.hasAttribute("classes")) {
+            buttonProps.classes = eval(`(${this.getAttribute("classes")})`)
+        }
+        console.log(this.innerHTML)
+        if (this.innerHTML != "") {
+            buttonProps.template = this.innerHTML;
+        }
+
+
+        this.#events = buttonProps.events;
+        this.#styles = buttonProps.styles;
+        this.#template = buttonProps.template;
+        this.#classes = buttonProps.classes; 
     }
     
     connectedCallback() {
+        this.attachShadow({mode: "open"});
+        const styleSheet = document.createElement("style");
+        this.shadowRoot.appendChild(styleSheet);
+        
         this.addStyles({ // * Default Styles
             display: "flex",
             margin: "0",
@@ -38,9 +78,10 @@ export default class ButtonComponent extends HTMLElement {
 
         this.addStyles(this.#styles);
         this.addEvents(this.#events);
-        if (this.innerText == "") {
-            this.shadowRoot.innerHTML = `${this.#text}`
-        }   
+        this.addTemplate(this.#template); 
+        this.addClasses(this.#classes); 
+
+        
     }
 
     static observedAttributes = [];
@@ -48,17 +89,41 @@ export default class ButtonComponent extends HTMLElement {
     attributeChangeCallback(name, newVal, oldVal) {
 
     }
-
+    /**
+     * 
+     * @param {Object} styles 
+     */
     addStyles(styles) {
         for (let name in styles) {
-            this.style[name] = styles[name];
+            const styleSheet = this.shadowRoot.querySelector("style");
+
+            styleSheet.innerHTML += `
+                :host {
+                    ${name}: ${styles[name]};
+                }
+
+            `
         }
+
+        
     }
 
     addEvents(events) {
         for (let name in events) {
             this.addEventListener(name, events[name]);
         }
+    }
+    /**
+     * 
+     * @param {Array} classes 
+     */
+    addClasses(classes) {
+        classes.forEach(className => {
+            this.classList.add(className);
+        })
+    }
+    addTemplate(template) {
+        this.shadowRoot.innerHTML += `<span>${template}</span>`;
     }
 }
 
@@ -75,6 +140,6 @@ const b = new ButtonComponent({
             alert('click')
         }
     },
-    text: "Hola muchachos"
+    text: "Hola muchachos",
+    styles: ["btn"]
 })
-document.body.appendChild(b)    
