@@ -33,28 +33,30 @@ export default class ButtonComponent extends HTMLElement {
          * @type {ButtonComponentProps}
          */
         const buttonProps = Object.assign({
-            events: {
-            },
+            events: {},
             styles: {},
             template: "",
             classes: []
         }, props)
         
+        const attributes = this.getAttributeNames();
 
-        if (this.hasAttribute("events")) {
-            buttonProps.events = eval(`(${this.getAttribute("events")})`)
-        }
-        if (this.hasAttribute("styles")) {
-            buttonProps.styles = eval(`(${this.getAttribute("styles")})`)
-        }
-        if (this.hasAttribute("classes")) {
-            buttonProps.classes = eval(`(${this.getAttribute("classes")})`)
-        }
-        console.log(this.innerHTML)
+        const events = Object.fromEntries(
+            Object.entries(this.#filterByPrefix(attributes, "@"))
+            .map((pair) => [pair[0], window[pair[1]]])
+        )
+
+        const styles = this.#filterByPrefix(attributes, "#");
+
+        if (events)
+            Object.assign(buttonProps, {events: events})
+
+        if (styles)
+            Object.assign(buttonProps, {styles: styles})
+
         if (this.innerHTML != "") {
             buttonProps.template = this.innerHTML;
         }
-
 
         this.#events = buttonProps.events;
         this.#styles = buttonProps.styles;
@@ -80,8 +82,6 @@ export default class ButtonComponent extends HTMLElement {
         this.addEvents(this.#events);
         this.addTemplate(this.#template); 
         this.addClasses(this.#classes); 
-
-        
     }
 
     static observedAttributes = [];
@@ -94,8 +94,8 @@ export default class ButtonComponent extends HTMLElement {
      * @param {Object} styles 
      */
     addStyles(styles) {
+        const styleSheet = this.shadowRoot.querySelector("style");
         for (let name in styles) {
-            const styleSheet = this.shadowRoot.querySelector("style");
 
             styleSheet.innerHTML += `
                 :host {
@@ -122,8 +122,22 @@ export default class ButtonComponent extends HTMLElement {
             this.classList.add(className);
         })
     }
+
     addTemplate(template) {
         this.shadowRoot.innerHTML += `<span>${template}</span>`;
+    }
+
+    /**
+     * 
+     * @param {String[]} list 
+     * @param {string} prefix 
+     * @returns 
+     */
+    #filterByPrefix(list, prefix) {
+        return Object.fromEntries(
+            list.filter((element) => element.includes(prefix))
+            .map((name) => [name.slice(prefix.length), this.getAttribute(name)])
+        )
     }
 }
 
@@ -136,8 +150,11 @@ const b = new ButtonComponent({
         
     },
     events: {
-        click: () => {
+        click: (e) => {
             alert('click')
+        },
+        change: (e) => {
+            console.log("   ")
         }
     },
     text: "Hola muchachos",

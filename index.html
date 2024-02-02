@@ -8,14 +8,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <script>
+        function cli(e) {
+            console.log("el boton furuncula")
+        }
+        function hov(e) {
+            console.log("B")
+        }
+        function blu(e) {
+            console.log("C")
+        }
+    </script>
+
     <custom-button
-        events="{
-                'click': function() {
-                    alert('Hello');   
-                },
-            }"
-        
-        classes="['btn', 'btn-primary']"
+        @click="cli"
+        @mousehover="hov"
+        @blur="blu"
+        #display="flex"
+        #background-color="red"
+        #color="blue"
     >
         Hello
     </custom-button>
