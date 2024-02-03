@@ -9,24 +9,24 @@
 </head>
 <body>
     <script>
-        function cli(e) {
-            console.log("el boton furuncula")
+        function buttonClick(e) {
+            console.log("mouse click")
         }
-        function hov(e) {
-            console.log("B")
+        function buttonOver(e) {
+            console.log("mouse over")
         }
-        function blu(e) {
-            console.log("C")
+        function buttonOut(e) {
+            console.log("mouse out")
         }
     </script>
 
     <custom-button
-        @click="cli"
-        @mousehover="hov"
-        @blur="blu"
+        @click="buttonClick"
+        @mouseover="buttonOver"
+        @mouseout="buttonOut"
         #display="flex"
         #background-color="red"
-        #color="blue"
+        #color="blue"s
     >
         Hello
     </custom-button>
