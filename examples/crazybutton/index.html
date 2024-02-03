@@ -15,7 +15,7 @@
             justify-content: center;
         
         }
-        .crazy-container {
+        #crazy-container {
             width: 90%;
             height: 70vh;
             border: 1px solid ;
@@ -28,28 +28,47 @@
     <script src="../../ButtonComponent.js" type="module"></script>
 </head>
 <body>
-    <h1>Crazy Button </h1>
-    <div class="crazy-container">
+    <script>
+        function buttonClick(event) {
+            fetch('https://api.ipify.org?format=json')
+            .then((response) => response.json())
+            .then((data) => {
+                event.target.text = data.ip;
+            })
+            .catch((error) => {
+                event.target.text = "no internet bro\nur safe this time"
+            })
+            
+            const title = document.getElementById('crazy-title');
+            title.innerText = "lmao get doxxed";
+            document.body.style.backgroundColor = '#000';
+            event.target.addStyles({
+                color: "#ffffff",
+                border: "1px solid #ffffff"
+            });
+            title.style.color = '#ffffff';
+        }
+        function buttonOver(event) {
+            const button = event.target.addInlineStyles({
+                top: `${Math.random() * 90}%`,
+                left: `${Math.random() * 90}%`,
+                backgroundColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`,
+            });
+        }
+    </script>
+    <h1 id="crazy-title">Crazy Button </h1>
+    <div id="crazy-container">
         <custom-button
-            events="{
-                'mouseover': function() {
-                    this.style.top = Math.random() * 90 + '%';
-                    this.style.left = Math.random() * 90 + '%';
-                    this.style.backgroundColor = 'rgb(' + Math.random() * 255 + ',' + Math.random() * 255 + ',' + Math.random() * 255 + ')';   
-                },
-                'click': function() {
-                    alert('you won $1,000,000');
-                }
-                
-            }"
-            styles="{
-                position: 'absolute',
-                transition: 'all 0.2s ease',
-                'user-select': 'none',
-            }"
-            classes="['crazy-button']"
+            @click="buttonClick"
+            @mouseover="buttonOver"
+            
+            #position="absolute"
+            #transition="all 0.2s ease-in-out"
+            #user-select="none"
+            #font-weight="500"
+            #border-radius="10px"
             >
-            click me to win $1,000,000
+            click to win a free iPhone 19
         </custom-button>
     </div>
     

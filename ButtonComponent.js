@@ -96,16 +96,17 @@ export default class ButtonComponent extends HTMLElement {
     addStyles(styles) {
         const styleSheet = this.shadowRoot.querySelector("style");
         for (let name in styles) {
-
             styleSheet.innerHTML += `
                 :host {
                     ${name}: ${styles[name]};
-                }
-
-            `
+                }`
         }
+    }
 
-        
+    addInlineStyles(styles) {
+        for (let name in styles) {
+            this.style[name] = styles[name];
+        }
     }
 
     addEvents(events) {
@@ -125,6 +126,21 @@ export default class ButtonComponent extends HTMLElement {
 
     addTemplate(template) {
         this.shadowRoot.innerHTML += `<span>${template}</span>`;
+    }
+
+    /**
+     * @param {string} text
+     */
+    set text(text) {
+        const spanList = this.shadowRoot.querySelectorAll('span');
+        spanList.forEach((span, index) => {
+            if (index == 0) {
+                span.innerText = text;
+                return;
+            }
+            this.shadowRoot.removeChild(span);
+        })
+        this.shadowRoot.innerText = text;
     }
 
     /**
@@ -152,7 +168,7 @@ const b = new ButtonComponent({
     events: {
         click: (e) => {
             alert('click')
-        },
+        }, 
         change: (e) => {
             console.log("   ")
         }
